@@ -3,6 +3,8 @@ package com.trifectumsoftware.gtrawores.common;
 import com.trifectumsoftware.gtrawores.GTRawOres;
 import com.trifectumsoftware.gtrawores.api.unification.ore.GTRawOresOrePrefix;
 import gregtech.api.unification.material.event.PostMaterialEvent;
+import gregtech.api.unification.ore.StoneType;
+import gregtech.api.unification.ore.StoneTypes;
 import gregtech.common.blocks.BlockOre;
 import gregtech.common.items.MetaItems;
 import net.minecraft.block.state.IBlockState;
@@ -56,6 +58,14 @@ public class EventHandlers {
                 GTRawOresOrePrefix.rawOre, material);
         if (rawOreDrop.isEmpty()) return;
 
+        StoneType stoneType = state.getValue(oreBlock.STONE_TYPE);
+        int amount = 1;
+        if (stoneType == StoneTypes.NETHERRACK) {
+            amount = 2;
+        } else if (stoneType == StoneTypes.ENDSTONE) {
+            amount = 3;
+        }
+
         int fortune = event.getFortuneLevel();
         EntityPlayer harvester = event.getHarvester();
 
@@ -70,7 +80,6 @@ public class EventHandlers {
 
         event.getDrops().clear();
 
-        int amount = 1;
         if (fortune > 0) {
             int bonus = RANDOM.nextInt(fortune + 2) - 1;
             if (bonus > 0) {
